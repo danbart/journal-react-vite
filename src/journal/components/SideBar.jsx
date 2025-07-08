@@ -12,9 +12,9 @@ export const SideBar = ({ drawerWidth = 240 }) => {
             <Drawer
                 variant="permanent"
                 open
-                ModalProps={
-                    { keepMounted: true } // Better open performance on mobile.
-                }
+                // ModalProps={
+                //     { keepMounted: true } // Better open performance on mobile.
+                // }
                 sx={{
                     display: { xs: 'block' },
                     '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
@@ -22,7 +22,7 @@ export const SideBar = ({ drawerWidth = 240 }) => {
             >
                 <Toolbar>
                     <Typography variant="h6" noWrap component="div">
-                        Journal   App
+                        Journal App
                     </Typography>
                     <Divider sx={{ my: 1 }} />
                 </Toolbar>
