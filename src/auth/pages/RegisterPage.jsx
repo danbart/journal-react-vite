@@ -37,18 +37,19 @@ export const RegisterPage = () => {
         setFormSubmitted(true);
         if (!isFormValid) return;
 
-        dispatch(startCreatingUserWithEmailPassword({ email, password, displayName }));
+        dispatch(startCreatingUserWithEmailPassword(formState));
     }
 
     return (
         <AuthLayout title="Crear cuenta">
-            <form onSubmit={onSubmit} >
-                <Grid container spacing={2} sx={{ mt: 1 }}>
+            <form onSubmit={onSubmit} className='animate__animated animate__fadeIn animate__faster'>
+                <Grid container>
+
                     <Grid item xs={12} sx={{ mt: 2 }}>
                         <TextField
-                            type="text"
                             label="Nombre completo"
-                            placeholder="Juan Perez"
+                            type="text"
+                            placeholder='Nombre completo'
                             fullWidth
                             name="displayName"
                             value={displayName}
@@ -57,11 +58,12 @@ export const RegisterPage = () => {
                             helperText={displayNameValid}
                         />
                     </Grid>
+
                     <Grid item xs={12} sx={{ mt: 2 }}>
                         <TextField
+                            label="Correo"
                             type="email"
-                            label="Email"
-                            placeholder="correo@google.com"
+                            placeholder='correo@google.com'
                             fullWidth
                             name="email"
                             value={email}
@@ -70,11 +72,12 @@ export const RegisterPage = () => {
                             helperText={emailValid}
                         />
                     </Grid>
+
                     <Grid item xs={12} sx={{ mt: 2 }}>
                         <TextField
+                            label="Contraseña"
                             type="password"
-                            label="Password"
-                            placeholder="Password"
+                            placeholder='Contraseña'
                             fullWidth
                             name="password"
                             value={password}
@@ -83,30 +86,39 @@ export const RegisterPage = () => {
                             helperText={passwordValid}
                         />
                     </Grid>
-                </Grid>
-                <Grid container sx={{ mb: 2, mt: 1 }}>
-                    <Grid
-                        item
-                        xs={12}
-                        display={!!errorMessage ? '' : 'none'}
-                    >
-                        <Alert severity='error'>{errorMessage}</Alert>
-                    </Grid>
-                    <Grid item xs={12} sx={{ mt: 2 }}>
-                        <Button
-                            disabled={isCheckingAuthentication}
-                            variant="contained"
-                            fullWidth
-                            type="submit"
+
+                    <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
+
+                        <Grid
+                            item
+                            xs={12}
+                            display={!!errorMessage ? '' : 'none'}
                         >
-                            Crear cuenta
-                        </Button>
+                            <Alert severity='error'>{errorMessage}</Alert>
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <Button
+                                disabled={isCheckingAuthentication}
+                                type="submit"
+                                variant='contained'
+                                fullWidth>
+                                Crear cuenta
+                            </Button>
+                        </Grid>
                     </Grid>
+
+
+                    <Grid container direction='row' justifyContent='end'>
+                        <Typography sx={{ mr: 1 }}>¿Ya tienes cuenta?</Typography>
+                        <Link component={RouterLink} color='inherit' to="/auth/login">
+                            ingresar
+                        </Link>
+                    </Grid>
+
                 </Grid>
-                <Grid container direction="row" justifyContent="end">
-                    <Typography sx={{ mr: 1 }}>¿Ya tienes una cuenta?</Typography>
-                    <Link component={RouterLink} color="inherit" to="/auth/login"> Entrar</Link>
-                </Grid>
+
+
             </form>
         </AuthLayout>
     )
