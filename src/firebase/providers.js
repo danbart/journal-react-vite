@@ -1,9 +1,9 @@
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile } from 'firebase/auth';
 import { FirebaseAuth } from "./config";
 
 const googleProvider = new GoogleAuthProvider();
 
-export const signInWithGoogle = async () => {
+export const singInWithGoogle = async () => {
 
     try {
         // This function can be used to sign in with Google
@@ -28,3 +28,28 @@ export const signInWithGoogle = async () => {
         };
     }
 };
+
+export const registerUserWithEmailPassword = async ({ email, password, displayName }) => {
+    try {
+        // This function can be used to register a new user with email and password
+        const resp = await createUserWithEmailAndPassword(FirebaseAuth, email, password);
+        const { uid, photoURL } = resp.user;
+
+        await updateProfile(FirebaseAuth.currentUser, { displayName });
+
+        return {
+            ok: true,
+            uid,
+            photoURL,
+            email,
+            displayName,
+        };
+
+    } catch (error) {
+        console.error("Error registering user:", error);
+        return {
+            ok: false,
+            errorMessage: error.message || 'An error occurred during registration.',
+        };
+    }
+}

@@ -3,9 +3,8 @@ import { Button, Grid, Link, TextField, Typography } from "@mui/material"
 import { useMemo } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Link as RouterLink } from "react-router"
-import { signInWithGoogle } from "../../firebase"
 import { useForm } from "../../hooks/useForm"
-import { checkingAuthentication, login, logout, startGoogleSignIn } from "../../store/auth"
+import { checkingAuthentication, startGoogleSignIn } from "../../store/auth"
 import { AuthLayout } from "../layout/AuthLayout"
 
 export const LoginPage = () => {
@@ -35,12 +34,6 @@ export const LoginPage = () => {
         // You can dispatch an action to the store or call an API
         // For example:
         dispatch(startGoogleSignIn());
-
-        const result = await signInWithGoogle();
-
-        if (!result.ok) return dispatch(logout(result.errorMessage));
-
-        dispatch(login(result));
     }
 
     return (

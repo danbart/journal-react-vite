@@ -1,19 +1,43 @@
-import { Button, Grid, Link, TextField, Typography } from "@mui/material"
+import { Alert, Button, Grid, Link, TextField, Typography } from "@mui/material"
+import { useMemo, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { Link as RouterLink } from "react-router"
 import { useForm } from "../../hooks/useForm"
+import { startCreatingUserWithEmailPassword } from "../../store/auth"
 import { AuthLayout } from "../layout/AuthLayout"
 
+
+const formData = {
+    displayName: '',
+    email: '',
+    password: '',
+}
+
+const formValidations = {
+    displayName: [(value) => value.length >= 3, 'El nombre debe tener al menos 3 caracteres'],
+    email: [(value) => value.includes('@'), 'El correo debe tener un @'],
+    password: [(value) => value.length >= 6, 'La contraseña debe tener al menos 6 caracteres'],
+}
 export const RegisterPage = () => {
 
-    const { fullName, email, password, onInputChange, formState } = useForm({
-        fullName: '',
-        email: '',
-        password: '',
-    })
+    const dispatch = useDispatch();
+
+    const [formSubmitted, setFormSubmitted] = useState(false);
+
+    const { status, errorMessage } = useSelector(state => state.auth);
+    const isCheckingAuthentication = useMemo(() => status === 'checking', [status]);
+
+    const {
+        displayName, email, password, onInputChange, formState,
+        isFormValid, emailValid, passwordValid, displayNameValid
+    } = useForm(formData, formValidations)
 
     const onSubmit = (event) => {
         event.preventDefault();
-        console.log(formState);
+        setFormSubmitted(true);
+        if (!isFormValid) return;
+
+        dispatch(startCreatingUserWithEmailPassword({ email, password, displayName }));
     }
 
     return (
@@ -26,11 +50,11 @@ export const RegisterPage = () => {
                             label="Nombre completo"
                             placeholder="Juan Perez"
                             fullWidth
-                            name="fullName"
-                            value={fullName}
+                            name="displayName"
+                            value={displayName}
                             onChange={onInputChange}
-                            error={!!formState.fullName && formState.fullName.length < 3}
-                            helperText={formState.fullName && formState.fullName.length < 3 ? "El nombre debe tener al menos 3 caracteres" : ""}
+                            error={!!displayNameValid && formSubmitted}
+                            helperText={displayNameValid}
                         />
                     </Grid>
                     <Grid item xs={12} sx={{ mt: 2 }}>
@@ -42,6 +66,8 @@ export const RegisterPage = () => {
                             name="email"
                             value={email}
                             onChange={onInputChange}
+                            error={!!emailValid && formSubmitted}
+                            helperText={emailValid}
                         />
                     </Grid>
                     <Grid item xs={12} sx={{ mt: 2 }}>
@@ -53,12 +79,22 @@ export const RegisterPage = () => {
                             name="password"
                             value={password}
                             onChange={onInputChange}
+                            error={!!passwordValid && formSubmitted}
+                            helperText={passwordValid}
                         />
                     </Grid>
                 </Grid>
                 <Grid container sx={{ mb: 2, mt: 1 }}>
+                    <Grid
+                        item
+                        xs={12}
+                        display={!!errorMessage ? '' : 'none'}
+                    >
+                        <Alert severity='error'>{errorMessage}</Alert>
+                    </Grid>
                     <Grid item xs={12} sx={{ mt: 2 }}>
                         <Button
+                            disabled={isCheckingAuthentication}
                             variant="contained"
                             fullWidth
                             type="submit"
