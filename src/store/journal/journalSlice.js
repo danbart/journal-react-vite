@@ -3,18 +3,43 @@ import { createSlice } from '@reduxjs/toolkit';
 export const JournalSlice = createSlice({
     name: 'Journal',
     initialState: {
-        isSaving: true,
+        isSaving: false,
         messageSaved: '',
         notes: [],
         active: null,
     },
     reducers: {
-        increment: (state, /* action */) => {
-            state.counter += 1;
+        addNewNote: (state, { payload }) => {
+            state.notes.push(payload);
+            state.isSaving = false;
+        },
+        setActiveNote: (state, { payload }) => {
+            state.active = payload;
+            state.isSaving = false;
+        },
+        setNotes: (state, { payload }) => {
+            state.notes = payload;
+            state.isSaving = false;
+        },
+        setSaving: (state) => {
+            state.isSaving = true;
+            state.messageSaved = '';
+        },
+        updateNote: (state, { payload }) => {
+            state.isSaving = false;
+            state.notes = state.notes.map(note =>
+                note.id === payload.id ? payload : note
+            );
+            state.messageSaved = `${payload.title}, updated successfully`;
+        },
+        deleteNoteById: (state, { payload }) => {
+            state.isSaving = false;
+            state.notes = state.notes.filter(note => note.id !== payload);
+            state.active = null;
         },
     }
 });
 
 
 // Action creators are generated for each case reducer function
-export const { increment } = JournalSlice.actions;
+export const { addNewNote, setActiveNote, setNotes, setSaving, updateNote, deleteNoteById } = JournalSlice.actions;
