@@ -31,11 +31,6 @@ export const authSlice = createSlice({
         },
         checkingCredentials: (state) => {
             state.status = 'checking';
-            state.uid = null;
-            state.email = null;
-            state.displayName = null;
-            state.photoURL = null;
-            state.errorMessage = null;
         },
     }
 });
