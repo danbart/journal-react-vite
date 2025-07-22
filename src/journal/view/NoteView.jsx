@@ -84,7 +84,7 @@ export const NoteView = () => {
                     Guardar
                 </Button>
             </Grid>
-            <Grid container>
+            <Grid container size={12}>
                 <TextField
                     type="text"
                     variant="filled"
@@ -110,7 +110,7 @@ export const NoteView = () => {
                 />
             </Grid>
 
-            <Grid container justifyContent="end">
+            <Grid container size={12} justifyContent="end">
                 <Button
                     onClick={onDeleteNote}
                     color="error"
