@@ -38,9 +38,32 @@ export const JournalSlice = createSlice({
             state.notes = state.notes.filter(note => note.id !== payload);
             state.active = null;
         },
+        setPhotosToActiveNote: (state, { payload }) => {
+            if (state.active) {
+                state.active.imageUrls = [...state.active.imageUrls, ...payload];
+                state.isSaving = false;
+            } else {
+                console.error('No active note to set photos for');
+            }
+        },
+        clearNoteLogout: (state) => {
+            state.isSaving = false;
+            state.messageSaved = '';
+            state.notes = [];
+            state.active = null;
+        }
     }
 });
 
 
 // Action creators are generated for each case reducer function
-export const { addNewNote, setActiveNote, setNotes, setSaving, updateNote, deleteNoteById } = JournalSlice.actions;
+export const {
+    addNewNote,
+    setActiveNote,
+    setNotes,
+    setSaving,
+    updateNote,
+    deleteNoteById,
+    setPhotosToActiveNote,
+    clearNoteLogout
+} = JournalSlice.actions;
